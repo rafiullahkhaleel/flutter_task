@@ -22,7 +22,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return ProductsModel.fromJson(data);
-      setState(() {});
     } else {
       throw Exception('ERROR');
     }
@@ -44,92 +43,124 @@ class _ProductsScreenState extends State<ProductsScreen> {
           } else if (!snapshot.hasData || snapshot.data == null) {
             return Center(child: Text('No Data Available'));
           } else {
-            return Center(
-              child: ListView.builder(
-                itemCount: snapshot.data!.products!.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 7),
-                    child: Card(
-                      elevation: 0.7,
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          spacing: 10,
-                          children: [
-                            CachedNetworkImage(
-                              imageUrl:
-                                  snapshot.data!.products![index].images![0]
-                                      .toString(),
-                              height: height * .25,
-                              width: width * .8,
-                              placeholder:
-                                  (context, url) =>
-                                      SpinKitCircle(color: Colors.black),
-                              errorWidget:
-                                  (context, url, error) =>
-                                      Icon(Icons.error, color: Colors.red),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 21),
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: height*.05,
+                    ),
+                    Text('Products',style: GoogleFonts.playfairDisplay(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 24,
+                        color: Colors.black
+                    ),),
+                    SizedBox(
+                      height: height*.015,
+                    ),
+                    TextField(
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search,size: 30,),
+                        focusColor: Colors.black,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)
+                        )
+                      ),
+                    ),
+                    SizedBox(
+                      height: height*.02,
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.products!.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 7),
+                            child: Card(
+                              elevation: 0.5,
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Column(
+                                  spacing: 10,
                                   children: [
-                                    Expanded(
-                                      child: Text(
-                                        snapshot.data!.products![index].title
-                                            .toString(),
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: width*.08,),
-                                    Text(
-                                      r'$' +
-                                          snapshot.data!.products![index].price
+                                    CachedNetworkImage(
+                                      imageUrl:
+                                          snapshot.data!.products![index].images![0]
                                               .toString(),
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                      height: height * .25,
+                                      width: width * .8,
+                                      placeholder:
+                                          (context, url) =>
+                                              SpinKitCircle(color: Colors.black),
+                                      errorWidget:
+                                          (context, url, error) =>
+                                              Icon(Icons.error, color: Colors.red),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                snapshot.data!.products![index].title
+                                                    .toString(),
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: width*.08,),
+                                            Text(
+                                              r'$' +
+                                                  snapshot.data!.products![index].price
+                                                      .toString(),
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          '4.9⭐⭐⭐⭐⭐',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        SizedBox(height: height*.01,),
+                                        Text(snapshot.data!.products![index].brand.toString(),
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400,
+                                            color: Color(0x800C0C0C)
+                                          ),
+                                        ),
+                                        SizedBox(height: height*.01,),
+                                        Text(snapshot.data!.products![index].category.toString(),
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        SizedBox(height: height*.013,),
+                                      ],
                                     ),
                                   ],
                                 ),
-                                Text(
-                                  '4.9⭐⭐⭐⭐⭐',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(height: height*.01,),
-                                Text(snapshot.data!.products![index].brand.toString(),
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0x800C0C0C)
-                                  ),
-                                ),
-                                SizedBox(height: height*.01,),
-                                Text(snapshot.data!.products![index].category.toString(),
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: height*.013,),
-                              ],
+                              ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
                     ),
-                  );
-                },
+                  ],
+                ),
               ),
             );
           }
@@ -138,29 +169,3 @@ class _ProductsScreenState extends State<ProductsScreen> {
     );
   }
 }
-
-// Image.network(
-//   snapshot.data!.products![index].images![0].toString(),
-//   height: height * .25,
-//   width: width * .8,
-//   errorBuilder: (context, error, stackTrace) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 50),
-//       child: Center(child: Text('Image not available')),
-//     );
-//   },
-//   loadingBuilder: (context, child, loadingProgress) {
-//     if (loadingProgress == null) {
-//       return child;
-//     } else {
-//       return Center(
-//         child: Padding(
-//           padding: const EdgeInsets.symmetric(
-//             vertical: 100,
-//           ),
-//           child: CircularProgressIndicator(),
-//         ),
-//       );
-//     }
-//   },
-// ),

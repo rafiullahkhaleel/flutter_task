@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_task/view/bottom_navigation_bar.dart';
 import 'package:flutter_task/view/products_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Timer(Duration(seconds: 3), (){
       Navigator.push(context,
-          MaterialPageRoute(builder: (context)=>ProductsScreen()));
+          MaterialPageRoute(builder: (context)=>BottomNavigation()  ));
     });
     super.initState();
   }
