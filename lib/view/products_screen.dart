@@ -34,126 +34,116 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   void initState() {
     super.initState();
-    getProducts().then((data){
+    getProducts().then((data) {
+      setState(() {
         dataList = data.products!;
         filteredList = data.products!;
+      });
     });
-    search.addListener((){
+    search.addListener(() {
       filterProducts();
     });
   }
 
-  void filterProducts(){
+  void filterProducts() {
     setState(() {
-      filteredList = dataList.where((title){
-        return title.title!.toLowerCase().contains(search.text.toLowerCase());
-      }).toList();
+      filteredList =
+          dataList.where((title) {
+            return title.title?.toLowerCase().contains(
+                  search.text.toLowerCase(),
+                ) ??
+                false;
+          }).toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.sizeOf(context).height;
-    final width = MediaQuery.sizeOf(context).width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 21),
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: height*.05,
+        child: Column(
+          children: [
+            SizedBox(height: height * .05),
+            Text(
+              'Products',
+              style: GoogleFonts.playfairDisplay(
+                fontWeight: FontWeight.w600,
+                fontSize: 24,
+                color: Colors.black,
               ),
-              Text('Products',style: GoogleFonts.playfairDisplay(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 24,
-                  color: Colors.black
-              ),),
-              SizedBox(
-                height: height*.015,
-              ),
-              SizedBox(
-                height: 45,
-                child: TextField(
-                  controller: search,
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.search,size: 30,),
-                      focusColor: Colors.black,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      )
+            ),
+            SizedBox(height: height * .015),
+            SizedBox(
+              height: 45,
+              child: TextField(
+                controller: search,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search, size: 30),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
-              SizedBox(
-                height: height*.02,
-              ),
-              FutureBuilder<ProductsModel>(
-                future: getProducts(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Column(
-                      children: [
-                        SizedBox(
-                          height: height*.35,
-                        ),
-                        SpinKitWave(color: Colors.black),
-                      ],
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('ERROR: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data == null) {
-                    return Center(child: Text('No Data Available'));
-                  } else {
-                    return Expanded(
-                      child: ListView.builder(
+            ),
+            SizedBox(height: height * .02),
+            Expanded(
+              child:
+                  dataList.isEmpty
+                      ? Center(child: SpinKitWave(color: Colors.black))
+                      : ListView.builder(
                         itemCount: filteredList.length,
                         itemBuilder: (context, index) {
+                          final product = filteredList[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 7),
                             child: Card(
                               elevation: 0.5,
                               color: Colors.white,
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                ),
                                 child: Column(
-                                  spacing: 10,
                                   children: [
                                     CachedNetworkImage(
-                                      imageUrl:
-                                      filteredList[index].images![0]
-                                              .toString(),
+                                      imageUrl: product.images?[0] ?? '',
                                       height: height * .25,
                                       width: width * .8,
                                       placeholder:
-                                          (context, url) =>
-                                              SpinKitCircle(color: Colors.black),
+                                          (context, url) => SpinKitCircle(
+                                            color: Colors.black,
+                                          ),
                                       errorWidget:
-                                          (context, url, error) =>
-                                              Icon(Icons.error, color: Colors.red),
+                                          (context, url, error) => Icon(
+                                            Icons.error,
+                                            color: Colors.red,
+                                          ),
                                     ),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Expanded(
                                               child: Text(
-                                                filteredList[index].title
-                                                    .toString(),
+                                                product.title ?? '',
                                                 style: GoogleFonts.poppins(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(width: width*.08,),
+                                            SizedBox(width: width * .08),
                                             Text(
-                                              r'$' +
-                                                  filteredList[index].price
-                                                      .toString(),
+                                              '\$${product.price}',
                                               style: GoogleFonts.poppins(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w600,
@@ -168,22 +158,24 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        SizedBox(height: height*.01,),
-                                        Text(filteredList[index].brand.toString(),
+                                        SizedBox(height: height * .01),
+                                        Text(
+                                          product.brand ?? '',
                                           style: GoogleFonts.poppins(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w400,
-                                            color: Color(0x800C0C0C)
+                                            color: Color(0x800C0C0C),
                                           ),
                                         ),
-                                        SizedBox(height: height*.01,),
-                                        Text(filteredList[index].category.toString(),
+                                        SizedBox(height: height * .01),
+                                        Text(
+                                          product.category ?? '',
                                           style: GoogleFonts.poppins(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w400,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        SizedBox(height: height*.013,),
+                                        SizedBox(height: height * .013),
                                       ],
                                     ),
                                   ],
@@ -193,12 +185,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           );
                         },
                       ),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
