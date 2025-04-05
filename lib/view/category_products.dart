@@ -67,7 +67,6 @@ class _CategoryProductsScreenState extends State<CategoryProductsScreen> {
         child: Column(
           children: [
             SizedBox(height: height * .05),
-            // Title of the category screen
             Row(
               children: [
                 IconButton(
@@ -75,20 +74,18 @@ class _CategoryProductsScreenState extends State<CategoryProductsScreen> {
                       Navigator.of(context).pop();
                     },
                     icon: Icon(Icons.arrow_back_ios)),
-                Center(
-                  child: Text(
-                    widget.title,
-                    style: GoogleFonts.playfairDisplay(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24,
-                      color: Colors.black,
-                    ),
+                  SizedBox(width: width*.2,),
+                Text(
+                  widget.title,
+                  style: GoogleFonts.playfairDisplay(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 24,
+                    color: Colors.black,
                   ),
                 ),
               ],
             ),
             SizedBox(height: height * .015),
-            // Search bar
             SizedBox(
               height: 45,
               child: TextField(
@@ -101,34 +98,94 @@ class _CategoryProductsScreenState extends State<CategoryProductsScreen> {
               ),
             ),
             SizedBox(height: height * .02),
-            // Displaying products in a list
             Expanded(
               child: dataList.isEmpty
                   ? Center(child: SpinKitWave(color: Colors.black))
                   : ListView.builder(
                 itemCount: dataList.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    child: Column(
-                      children: [
-                        // Display product image
-                        CachedNetworkImage(
-                          imageUrl: dataList[index].images?.isNotEmpty == true
-                              ? dataList[index].images![0]
-                              : 'https://via.placeholder.com/150', // Default placeholder image
-                          height: height * .25,
-                          width: width * .8,
-                          placeholder: (context, url) => SpinKitCircle(
-                            color: Colors.black,
-                          ),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.error,
-                            color: Colors.red,
-                          ),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Card(
+                      elevation: 0.5,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
                         ),
-                        // Product title
-                        Text('${dataList[index].title}')
-                      ],
+                        child: Column(
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: dataList[index].images?[0] ?? '',
+                              height: height * .25,
+                              width: width * .8,
+                              placeholder:
+                                  (context, url) => SpinKitCircle(
+                                color: Colors.black,
+                              ),
+                              errorWidget:
+                                  (context, url, error) => Icon(
+                                Icons.error,
+                                color: Colors.red,
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        dataList[index].title ?? '',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: width * .08),
+                                    Text(
+                                      '\$${dataList[index].price}',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  '4.9⭐⭐⭐⭐⭐',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: height * .01),
+                                Text(
+                                  dataList[index].brand ?? '',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0x800C0C0C),
+                                  ),
+                                ),
+                                SizedBox(height: height * .01),
+                                Text(
+                                  dataList[index].category ?? '',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                SizedBox(height: height * .013),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 },
