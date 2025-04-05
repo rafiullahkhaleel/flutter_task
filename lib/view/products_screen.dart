@@ -35,6 +35,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   void initState() {
     super.initState();
     getProducts().then((data) {
+      if (!mounted) return;
       setState(() {
         dataList = data.products!;
         filteredList = data.products!;

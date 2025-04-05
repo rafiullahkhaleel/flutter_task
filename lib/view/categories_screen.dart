@@ -59,7 +59,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   void initState() {
     super.initState();
+    if (!mounted) return;
     setState(() {
+
       getData().then((data) {
         dataList = data;
         filteredList = data;
@@ -121,7 +123,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   dataList.isEmpty
                       ? Center(child: SpinKitWave(color: Colors.black))
                       : GridView.count(
-                        childAspectRatio: width / height * 1.8,
+                        childAspectRatio: width / height * 2,
                         crossAxisCount: 2,
                         mainAxisSpacing: height * .03,
                         crossAxisSpacing: width * .06,
