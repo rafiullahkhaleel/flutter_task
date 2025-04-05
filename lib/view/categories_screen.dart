@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_task/model/categories_model.dart';
+import 'package:flutter_task/view/category_products.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -57,21 +58,22 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    if (!mounted) return;
-    setState(() {
-
-      getData().then((data) {
-        dataList = data;
-        filteredList = data;
-      });
-      searchController.addListener(() {
-        filteredCategories();
-      });
+    fetchCategories();
+    searchController.addListener(() {
+      filteredCategories();
     });
   }
 
+  void fetchCategories() async {
+    final data = await getData();
+    if (!mounted) return;
+    setState(() {
+      dataList = data;
+      filteredList = data;
+    });
+  }
   void filteredCategories() {
     setState(() {
 
@@ -129,49 +131,57 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         crossAxisSpacing: width * .06,
                         children: List.generate(filteredList.length, (index) {
                           final category = filteredList[index];
-                          return Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.brown.withOpacity(.5),
-                            ),
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child:
-                                        category.image != null
-                                            ? CachedNetworkImage(
-                                              imageUrl: category.image!,
-                                              fit: BoxFit.cover,
-                                              placeholder:
-                                                  (context, url) =>
-                                                      SpinKitCircle(
-                                                        color: Colors.black,
-                                                      ),
-                                              errorWidget:
-                                                  (context, url, error) => Icon(
-                                                    Icons.error,
-                                                    color: Colors.red,
-                                                  ),
-                                            )
-                                            : Icon(Icons.image, size: 40),
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Align(
-                                  alignment: Alignment(-.8, .7),
-                                  child: Text(
-                                    category.name ?? '',
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xfff2f2f2),
+                          return InkWell(
+                            onTap: (){
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context)=> CategoryProductsScreen(
+                                      url: category.slug.toString(),
+                                      title: category.name.toString())));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.brown.withOpacity(.5),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child:
+                                          category.image != null
+                                              ? CachedNetworkImage(
+                                                imageUrl: category.image!,
+                                                fit: BoxFit.cover,
+                                                placeholder:
+                                                    (context, url) =>
+                                                        SpinKitCircle(
+                                                          color: Colors.black,
+                                                        ),
+                                                errorWidget:
+                                                    (context, url, error) => Icon(
+                                                      Icons.error,
+                                                      color: Colors.red,
+                                                    ),
+                                              )
+                                              : Icon(Icons.image, size: 40),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(height: 8),
+                                  Align(
+                                    alignment: Alignment(-.8, .7),
+                                    child: Text(
+                                      category.name ?? '',
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xfff2f2f2),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         }),

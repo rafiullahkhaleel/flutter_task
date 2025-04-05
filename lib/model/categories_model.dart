@@ -1,8 +1,9 @@
+
 class CategoriesModel {
   String? slug;
   String? name;
   String? url;
-  String? image; // 👍 add this line to hold image url
+  String? image;
 
   CategoriesModel({this.slug, this.name, this.url, this.image});
 
