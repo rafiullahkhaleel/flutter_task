@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_task/view/categories_screen.dart';
 import 'package:flutter_task/view/products_screen.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});
@@ -42,8 +41,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings,color: Colors.white,),
-          label: 'Setting'
+              icon: Icon(CupertinoIcons.square_grid_2x2,color: Colors.white,),
+          label: 'Categories'
           )
         ],
       ),

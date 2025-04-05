@@ -2,8 +2,9 @@ class CategoriesModel {
   String? slug;
   String? name;
   String? url;
+  String? image; // 👍 add this line to hold image url
 
-  CategoriesModel({this.slug, this.name, this.url});
+  CategoriesModel({this.slug, this.name, this.url, this.image});
 
   CategoriesModel.fromJson(Map<String, dynamic> json) {
     slug = json['slug'];
@@ -16,6 +17,7 @@ class CategoriesModel {
     data['slug'] = slug;
     data['name'] = name;
     data['url'] = url;
+    data['image'] = image;
     return data;
   }
 }
