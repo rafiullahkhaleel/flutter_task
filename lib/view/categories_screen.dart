@@ -128,7 +128,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         childAspectRatio: width / height * 2,
                         crossAxisCount: 2,
                         mainAxisSpacing: height * .03,
-                        crossAxisSpacing: width * .06,
+                        crossAxisSpacing: width * .075,
                         children: List.generate(filteredList.length, (index) {
                           final category = filteredList[index];
                           return InkWell(
