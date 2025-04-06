@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_task/model/products_model.dart';
+import 'package:flutter_task/view/products_detail_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -102,84 +103,91 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           final product = filteredList[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 7),
-                            child: Card(
-                              elevation: 0.5,
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                ),
-                                child: Column(
-                                  children: [
-                                    CachedNetworkImage(
-                                      imageUrl: product.images?[0] ?? '',
-                                      height: height * .25,
-                                      width: width * .8,
-                                      placeholder:
-                                          (context, url) => SpinKitCircle(
-                                            color: Colors.black,
-                                          ),
-                                      errorWidget:
-                                          (context, url, error) => Icon(
-                                            Icons.error,
-                                            color: Colors.red,
-                                          ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                product.title ?? '',
+                            child: InkWell(
+                              onTap: (){
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context)=>ProductsDetailScreen(
+                                        id: product.id!)));
+                              },
+                              child: Card(
+                                elevation: 0.5,
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      CachedNetworkImage(
+                                        imageUrl: product.images?[0] ?? '',
+                                        height: height * .25,
+                                        width: width * .8,
+                                        placeholder:
+                                            (context, url) => SpinKitCircle(
+                                              color: Colors.black,
+                                            ),
+                                        errorWidget:
+                                            (context, url, error) => Icon(
+                                              Icons.error,
+                                              color: Colors.red,
+                                            ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  product.title ?? '',
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: width * .08),
+                                              Text(
+                                                '\$${product.price}',
                                                 style: GoogleFonts.poppins(
-                                                  fontSize: 14,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
+                                            ],
+                                          ),
+                                          Text(
+                                            '${product.rating}  ⭐ ⭐ ⭐ ⭐ ⭐',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w600,
                                             ),
-                                            SizedBox(width: width * .08),
-                                            Text(
-                                              '\$${product.price}',
-                                              style: GoogleFonts.poppins(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600,
-                                              ),
+                                          ),
+                                          SizedBox(height: height * .01),
+                                          Text(
+                                            product.brand ?? 'Not Exist',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400,
+                                              color: Color(0x800C0C0C),
                                             ),
-                                          ],
-                                        ),
-                                        Text(
-                                          '4.9⭐⭐⭐⭐⭐',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w600,
                                           ),
-                                        ),
-                                        SizedBox(height: height * .01),
-                                        Text(
-                                          product.brand ?? '',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                            color: Color(0x800C0C0C),
+                                          SizedBox(height: height * .01),
+                                          Text(
+                                            product.category ?? '',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: height * .01),
-                                        Text(
-                                          product.category ?? '',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        SizedBox(height: height * .013),
-                                      ],
-                                    ),
-                                  ],
+                                          SizedBox(height: height * .013),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
