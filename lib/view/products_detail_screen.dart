@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_task/model/products_model.dart';
@@ -74,6 +73,18 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                     return Center(child: Text('No Data Available'));
                   } else {
                     final api = snapshot.data;
+                    final images = api?.images ?? [];
+
+                    List<String> leftImages = [];
+                    List<String> rightImages = [];
+
+                    for (int i = 0; i < images.length; i++) {
+                      if (i % 2 == 0) {
+                        leftImages.add(images[i]);
+                      } else {
+                        rightImages.add(images[i]);
+                      }
+                    }
                     return Column(
                       spacing: height * .01,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,6 +147,76 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
                                   ? '\n${api?.description.toString()}'
                                   : 'Not Exist',
                         ),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ListView(
+                                  children: [
+                                    Text(
+                                      'Product Gallery:',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    ...List.generate(leftImages.length, (index) {
+                                      return Column(
+                                        children: [
+                                          SizedBox(height:height*.018,),
+                                          Container(
+                                            width: width*.42,
+                                            height: height * .15,
+                                            color: Colors.brown.withOpacity(.25),
+                                            child: CachedNetworkImage(
+                                              imageUrl: leftImages[index],
+                                              placeholder:
+                                                  (context, url) =>
+                                                  SpinKitCircle(color: Colors.black),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                  Icon(Icons.error, color: Colors.red),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    })
+                                  ],
+                                ),
+                              ),
+
+                              Expanded(
+                                child: ListView(
+                                  children: [
+                                    ...List.generate(rightImages.length, (index) {
+                                      return Column(
+                                        children: [
+                                          Container(
+                                            width: width*.42,
+                                            height: height * .15,
+                                            color: Colors.brown.withOpacity(.25),
+                                            child: CachedNetworkImage(
+                                              imageUrl: rightImages[index],
+                                              placeholder:
+                                                  (context, url) =>
+                                                  SpinKitCircle(color: Colors.black),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                  Icon(Icons.error, color: Colors.red),
+                                            ),
+                                          ),
+                                          SizedBox(height:height*.018,),
+                                        ],
+                                      );
+                                    })
+                                  ],
+                                ),
+                              )
+
+                            ],
+                          ),
+                        )
                       ],
                     );
                   }
@@ -148,3 +229,185 @@ class _ProductsDetailScreenState extends State<ProductsDetailScreen> {
     );
   }
 }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final height = MediaQuery.of(context).size.height;
+//     final width = MediaQuery.of(context).size.width;
+//
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       body: Padding(
+//         padding: EdgeInsets.symmetric(horizontal: 21),
+//         child: FutureBuilder<Products>(
+//           future: getData(),
+//           builder: (context, snapshot) {
+//             if (snapshot.connectionState == ConnectionState.waiting) {
+//               return Center(child: SpinKitWave(color: Colors.black));
+//             } else if (snapshot.hasError) {
+//               return Center(child: Text('ERROR : ${snapshot.error}'));
+//             } else if (!snapshot.hasData) {
+//               return Center(child: Text('No Data Available'));
+//             } else {
+//               final api = snapshot.data!;
+//               final images = api.images ?? [];
+//
+//               // 🔁 Distribute images alternately
+//               List<String> leftImages = [];
+//               List<String> rightImages = [];
+//
+//               for (int i = 0; i < images.length; i++) {
+//                 if (i % 2 == 0) {
+//                   leftImages.add(images[i]);
+//                 } else {
+//                   rightImages.add(images[i]);
+//                 }
+//               }
+//
+//               return ListView(
+//                 padding: EdgeInsets.only(top: height * 0.05, bottom: 24),
+//                 children: [
+//                   Row(
+//                     children: [
+//                       IconButton(
+//                         onPressed: () {
+//                           Navigator.of(context).pop();
+//                         },
+//                         icon: Icon(Icons.arrow_back_ios),
+//                       ),
+//                       SizedBox(width: width * .15),
+//                       Text(
+//                         'Product Details',
+//                         style: GoogleFonts.playfairDisplay(
+//                           fontWeight: FontWeight.w600,
+//                           fontSize: 24,
+//                           color: Colors.black,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   SizedBox(height: height * .02),
+//
+//                   // 💡 Detail Widgets
+//                   Container(
+//                     decoration: BoxDecoration(
+//                       color: Colors.grey[100],
+//                       borderRadius: BorderRadius.circular(16),
+//                     ),
+//                     padding: EdgeInsets.all(16),
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         TextWidget(title: 'Name', value: api.title ?? 'Not Exist'),
+//                         TextWidget(title: 'Price', value: '${api.price}'),
+//                         TextWidget(title: 'Category', value: api.category ?? 'Not Exist'),
+//                         TextWidget(title: 'Brand', value: api.brand ?? 'Not Exist'),
+//                         TextWidget(
+//                           title: 'Rating',
+//                           value: '${api.rating}   ⭐ ⭐ ⭐ ⭐',
+//                         ),
+//                         TextWidget(
+//                           title: 'Description',
+//                           value: '\n${api.description}',
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                   SizedBox(height: 24),
+//
+//                   Row(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       // 🔵 Left Column
+//                       Expanded(
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Container(
+//                               margin: EdgeInsets.only(bottom: 12),
+//                               padding: EdgeInsets.all(16),
+//                               decoration: BoxDecoration(
+//                                 color: Colors.deepPurple,
+//                                 borderRadius: BorderRadius.circular(16),
+//                               ),
+//                               child: Text(
+//                                 '🔶 Product Images',
+//                                 style: TextStyle(
+//                                   fontSize: 18,
+//                                   color: Colors.white,
+//                                   fontWeight: FontWeight.bold,
+//                                 ),
+//                               ),
+//                             ),
+//
+//                             // 🔵 Left Images
+//                             ListView.builder(
+//                               itemCount: leftImages.length,
+//                               shrinkWrap: true,
+//                               physics: NeverScrollableScrollPhysics(),
+//                               itemBuilder: (context, index) {
+//                                 return Container(
+//                                   margin: EdgeInsets.only(bottom: 12),
+//                                   decoration: BoxDecoration(
+//                                     borderRadius: BorderRadius.circular(12),
+//                                     color: Colors.blue[50],
+//                                   ),
+//                                   child: CachedNetworkImage(
+//                                     imageUrl: leftImages[index],
+//                                     height: 160,
+//                                     width: double.infinity,
+//                                     fit: BoxFit.cover,
+//                                     placeholder:
+//                                         (context, url) =>
+//                                             SpinKitCircle(color: Colors.black),
+//                                     errorWidget:
+//                                         (context, url, error) =>
+//                                             Icon(Icons.error),
+//                                   ),
+//                                 );
+//                               },
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//
+//                       SizedBox(width: 12),
+//
+//                       // 🟢 Right Column
+//                       Expanded(
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: List.generate(rightImages.length, (index) {
+//                             return Container(
+//                               margin: EdgeInsets.only(bottom: 12),
+//                               decoration: BoxDecoration(
+//                                 borderRadius: BorderRadius.circular(12),
+//                                 color: Colors.green[50],
+//                               ),
+//                               child: CachedNetworkImage(
+//                                 imageUrl: rightImages[index],
+//                                 height: 160,
+//                                 width: double.infinity,
+//                                 fit: BoxFit.cover,
+//                                 placeholder:
+//                                     (context, url) =>
+//                                         SpinKitCircle(color: Colors.black),
+//                                 errorWidget:
+//                                     (context, url, error) => Icon(Icons.error),
+//                               ),
+//                             );
+//                           }),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               );
+//             }
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
