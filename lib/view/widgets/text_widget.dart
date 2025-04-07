@@ -19,7 +19,7 @@ class TextWidget extends StatelessWidget {
         children: [
           TextSpan(
             text: value,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400,),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_task/view/categories_screen.dart';
+import 'package:flutter_task/view/favourite_screen.dart';
 import 'package:flutter_task/view/products_screen.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -11,7 +12,7 @@ class BottomNavigation extends StatefulWidget {
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
-  List<Widget> screen= [ProductsScreen(),CategoriesScreen()];
+  List<Widget> screen= [ProductsScreen(),CategoriesScreen(),FavouriteScreen()];
   int index = 0;
   @override
   Widget build(BuildContext context) {
@@ -43,6 +44,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
           BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.square_grid_2x2,color: Colors.white,),
           label: 'Categories'
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite_border,color: Colors.white,),
+              label: 'Favourite'
           )
         ],
       ),
