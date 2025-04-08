@@ -66,20 +66,22 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          "Products",
+          style: GoogleFonts.playfairDisplay(
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 21),
         child: Column(
           children: [
-            SizedBox(height: height * .05),
-            Text(
-              'Products',
-              style: GoogleFonts.playfairDisplay(
-                fontWeight: FontWeight.w600,
-                fontSize: 24,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(height: height * .015),
             SizedBox(
               height: 45,
               child: TextField(

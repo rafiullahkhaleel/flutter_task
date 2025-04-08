@@ -82,31 +82,27 @@ class _CategoryProductsScreenState extends State<CategoryProductsScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: (){
+              Navigator.of(context).pop();
+            },
+            icon: Icon(Icons.arrow_back_ios)),
+        title: Text(
+          widget.title,
+          style: GoogleFonts.playfairDisplay(
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 21),
         child: Column(
           children: [
-            SizedBox(height: height * .05),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: Icon(Icons.arrow_back_ios),
-                ),
-                SizedBox(width: width * .2),
-                Text(
-                  widget.title,
-                  style: GoogleFonts.playfairDisplay(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 24,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: height * .015),
             SizedBox(
               height: 45,
               child: TextField(
