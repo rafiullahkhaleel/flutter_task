@@ -26,6 +26,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           });
           index = value;
         },
+        showSelectedLabels: true,
         selectedLabelStyle: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w400
@@ -47,7 +48,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite_border,color: Colors.white,),
-              label: 'Favourite'
+              label: 'Favourite',
           )
         ],
       ),
